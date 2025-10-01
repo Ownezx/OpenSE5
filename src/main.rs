@@ -8,11 +8,12 @@ use bevy::{
 use bevy_egui::EguiPlugin;
 use hexx::{algorithms::a_star, *};
 
-use crate::{se5_components::SE5Components, se5_core::SE5Core, se5_gameplay::SE5Gameplay, se5_ui::SE5Ui};
+use crate::{se5_components::SE5Components, se5_core::SE5Core, se5_gameplay::SE5Gameplay, se5_resources::SE5Resource, se5_ui::SE5Ui};
 
 mod se5_components;
 mod se5_ui;
 mod se5_core;
+mod se5_resources;
 mod se5_gameplay;
 
 /// World size of the hexagons (outer radius)
@@ -34,6 +35,7 @@ pub fn main() {
     app.add_plugins(SE5Components);
     app.add_plugins(SE5Core);
     app.add_plugins(SE5Gameplay);
+    app.add_plugins(SE5Resource);
     app.add_plugins(SE5Ui);
 
     app.add_systems(Startup, (setup_camera, setup_grid));
