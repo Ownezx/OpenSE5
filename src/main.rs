@@ -5,24 +5,40 @@ use bevy::{
     render::{mesh::Indices, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology},
     window::PrimaryWindow,
 };
+use bevy_egui::EguiPlugin;
 use hexx::{algorithms::a_star, *};
+
+use crate::{se5_components::SE5Components, se5_core::SE5Core, se5_gameplay::SE5Gameplay, se5_ui::SE5Ui};
+
+mod se5_components;
+mod se5_ui;
+mod se5_core;
+mod se5_gameplay;
 
 /// World size of the hexagons (outer radius)
 const HEX_SIZE: Vec2 = Vec2::splat(14.0);
 const MAP_RADIUS: u32 = 10;
 
 pub fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                resolution: (1_000.0, 1_000.0).into(),
-                ..default()
-            }),
+    let mut app = App::new();
+    app.add_plugins(DefaultPlugins.set(WindowPlugin {
+        primary_window: Some(Window {
+            resolution: (1_000.0, 1_000.0).into(),
             ..default()
-        }))
-        .add_systems(Startup, (setup_camera, setup_grid))
-        .add_systems(Update, handle_input)
-        .run();
+        }),
+        ..default()
+    }));
+
+    app.add_plugins(EguiPlugin::default());
+
+    app.add_plugins(SE5Components);
+    app.add_plugins(SE5Core);
+    app.add_plugins(SE5Gameplay);
+    app.add_plugins(SE5Ui);
+
+    app.add_systems(Startup, (setup_camera, setup_grid));
+    app.add_systems(Update, handle_input);
+    app.run();
 }
 
 #[derive(Debug, Resource)]
